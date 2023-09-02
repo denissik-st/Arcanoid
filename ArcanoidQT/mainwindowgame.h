@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "scenestarfall.h"
+#include<QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowGame; }
@@ -17,12 +18,11 @@ public:
     MainWindowGame(QWidget *parent = nullptr);
     ~MainWindowGame();
     SceneStarfall *scene;
-    QTimer *starfallTimer;
+    QPushButton *playGamebtn;
 
 
 private:
     Ui::MainWindowGame *ui;
-private slots:
-    void updatestarfall();
+
 };
 #endif // MAINWINDOWGAME_H

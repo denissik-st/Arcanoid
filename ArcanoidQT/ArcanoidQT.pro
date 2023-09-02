@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindowgame.cpp \
-    scenestarfall.cpp
+    scenestarfall.cpp \
+    star.cpp
 
 HEADERS += \
     mainwindowgame.h \
-    scenestarfall.h
+    scenestarfall.h \
+    star.h
 
 FORMS += \
     mainwindowgame.ui
