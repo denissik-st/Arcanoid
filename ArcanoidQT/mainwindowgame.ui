@@ -7,16 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>728</height>
+    <height>768</height>
    </rect>
   </property>
   <property name="font">
    <font>
-    <family>Sitka</family>
-    <pointsize>14</pointsize>
-    <weight>75</weight>
-    <italic>true</italic>
-    <bold>true</bold>
+    <family>Wide Latin</family>
+    <pointsize>28</pointsize>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
    </font>
   </property>
   <property name="windowTitle">
@@ -26,8 +26,18 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QGraphicsView" name="mainscene">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="styleSheet">
-       <string notr="true">border:0px</string>
+       <string notr="true">border:0;
+font: 16pt &quot;Pristina&quot;;</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
      </widget>
     </item>

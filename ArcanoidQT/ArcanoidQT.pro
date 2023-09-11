@@ -16,13 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ball.cpp \
+    board.cpp \
+    destroyobject.cpp \
     main.cpp \
     mainwindowgame.cpp \
+    sceneplaygame.cpp \
     scenestarfall.cpp \
     star.cpp
 
 HEADERS += \
+    ball.h \
+    board.h \
+    destroyobject.h \
     mainwindowgame.h \
+    sceneplaygame.h \
     scenestarfall.h \
     star.h
 
@@ -33,3 +41,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    qrc.qrc

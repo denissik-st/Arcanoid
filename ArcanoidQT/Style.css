@@ -1,0 +1,35 @@
+QLabel#titlelbn {
+    background-color: rgba(0,0,0,0);
+    color: white;
+    font: 87 8pt "Segoe UI Black";
+    font-size:35px;
+}
+QPushButton#btn {
+    background-color: rgba(0,0,0,0);
+    color: white;
+    font: 87 8pt "Segoe UI Black";
+    font-size:35px;
+    border:2px solid white;
+    border-radius:20px;
+}
+QPushButton#btn:hover {
+    background-color: rgba(0,0,0,0);
+    color: white;
+    font: 87 8pt "Segoe UI Black";
+    font-size:35px;
+    border:10px solid white;
+    border-radius:20px;
+}
+
+QLabel#ver {
+    background-color: rgba(0,0,0,0);
+    color: white;
+    font: 87 8pt "Segoe UI Black";
+    font-size:12px;
+}
+QLabel#titleEndlbn {
+    background-color: rgba(0,0,0,0);
+    color: white;
+    font: 87 8pt "Segoe UI Black";
+    font-size:35px;
+}
