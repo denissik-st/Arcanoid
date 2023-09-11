@@ -2,22 +2,21 @@
 #define BALL_H
 #include<QGraphicsItem>
 #include<QTransform>
+#include <QtMath>
 
 class Ball : public QGraphicsItem
 {
 public:
+    float alpha;
     bool start;
     int speed;
     int ballSize;
     bool flagGoUp;
-    bool flagGoLeft;
     QTransform *ballMatrix;
     Ball();
-    void moveLeft();
-    void moveRight();
+    void moveX(float alpha);
     void moveDown();
     void moveUp();
-    void setFlagUp();
 protected:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

@@ -1,14 +1,17 @@
 #include "ball.h"
 #include<QPainter>
+#include<QDebug>
 
 Ball::Ball()
 {
     start=false;
     speed = 10;
     ballSize =19;
+    alpha =M_PI_2;
     ballMatrix = new QTransform;
 
 }
+
 
 QRectF Ball::boundingRect() const
 {
@@ -24,14 +27,10 @@ void Ball::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     painter->drawEllipse(0,0,ballSize,ballSize);
 }
 
-void Ball::moveLeft()
-{
-    moveBy(-speed,0);
-}
 
-void Ball::moveRight()
+void Ball::moveX(float alpha)
 {
-    moveBy(speed,0);
+    moveBy(speed*qCos(alpha),0);
 }
 
 void Ball::moveDown()
@@ -44,10 +43,6 @@ void Ball::moveUp()
     moveBy(0,-speed);
 }
 
-void Ball::setFlagUp()
-{
-    flagGoUp = true;
-}
 
 
 

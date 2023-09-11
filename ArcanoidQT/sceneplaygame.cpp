@@ -4,6 +4,8 @@
 #include<QList>
 #include<QTransform>
 #include<QPushButton>
+
+
 scenePlayGame::scenePlayGame()
 {
     //Панель состояния
@@ -37,7 +39,6 @@ scenePlayGame::scenePlayGame()
     playBall->setX(512-20/2);
     playBall->setY(710);
     playBall->flagGoUp=true;
-    playBall->flagGoLeft=false;
     addItem(playBall);
     //Создание разрушаемых объектов
     listDestroyObject =new QList <QGraphicsItem *>;
@@ -97,29 +98,22 @@ void scenePlayGame::keyPressEvent(QKeyEvent *event)
 //Движение мяча
 void scenePlayGame::moveBall()
 {
-    if(playBall->flagGoUp && playBall->flagGoLeft){
+    if(playBall->flagGoUp){
         playBall->moveUp();
-        playBall->moveLeft();
+        playBall->moveX(playBall->alpha);
 
     }
-    if(!playBall->flagGoUp && playBall->flagGoLeft){
+    if(!playBall->flagGoUp ){
         playBall->moveDown();
-        playBall->moveLeft();
-    }
-    if(playBall->flagGoUp && !playBall->flagGoLeft){
-        playBall->moveUp();
-        playBall->moveRight();
-    }
-    if(!playBall->flagGoUp && !playBall->flagGoLeft){
-        playBall->moveDown();
-        playBall->moveRight();
-    }
-    if(playBall->pos().x()<20){
-        playBall->flagGoLeft=false;
+        playBall->moveX(playBall->alpha);
     }
     if(playBall->pos().x()>1000-playBall->ballSize){
-        playBall->flagGoLeft=true;
+        playBall->alpha=playBall->alpha+M_PI;
     }
+    if(playBall->pos().x()<0){
+        playBall->alpha=playBall->alpha-M_PI;
+    }
+
     if(playBall->pos().y()<20+playBall->ballSize/2){
         playBall->flagGoUp=false;
     }
@@ -133,13 +127,8 @@ void scenePlayGame::moveBall()
         *boardList = collidingItems(playBoard);
         for(QGraphicsItem *item:*boardList){
             if(item==playBall){
-                playBall->flagGoUp=true;
-               if(item->pos().x()-playBoard->pos().x()+playBall->ballSize/2<playBoard->boardSizeX/2){
-                   playBall->flagGoLeft = true;
-               }
-               else {
-                   playBall->flagGoLeft = false;
-               }
+               playBall->flagGoUp=true;
+               playBall->alpha=((playBoard->boardSizeX-(playBall->pos().x()-playBoard->pos().x()))-playBall->ballSize/2)*(M_PI/(float)playBoard->boardSizeX);
             }
         }
     }
