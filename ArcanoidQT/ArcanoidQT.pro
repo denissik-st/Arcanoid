@@ -19,6 +19,7 @@ SOURCES += \
     ball.cpp \
     board.cpp \
     destroyobject.cpp \
+    live.cpp \
     main.cpp \
     mainwindowgame.cpp \
     sceneplaygame.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     ball.h \
     board.h \
     destroyobject.h \
+    live.h \
     mainwindowgame.h \
     sceneplaygame.h \
     scenestarfall.h \

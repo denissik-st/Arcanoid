@@ -7,6 +7,7 @@
 #include "board.h"
 #include "ball.h"
 #include "destroyobject.h"
+#include "live.h"
 
 
 class scenePlayGame : public QGraphicsScene
@@ -20,8 +21,10 @@ public:
     Ball *playBall;
     DestroyObject *destoyObject;
     QList <QGraphicsItem *> *listDestroyObject;
+    QList <QGraphicsItem *> *playLivesList;
     QTimer *playTimer;
     scenePlayGame();
+    void setPosBoardAndBall();
     signals:
     void endGame(int result);
 protected:

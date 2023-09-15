@@ -31,14 +31,10 @@ scenePlayGame::scenePlayGame()
     addWidget(deleteDestroyObjbtn);*/
     //Создание доски
     playBoard = new Board;
-    playBoard->setX(512-playBoard->boardSizeX/2);
-    playBoard->setY(730);
     addItem(playBoard);
     //Создание мяча
     playBall =new Ball;
-    playBall->setX(512-20/2);
-    playBall->setY(710);
-    playBall->flagGoUp=true;
+    setPosBoardAndBall();
     addItem(playBall);
     //Создание разрушаемых объектов
     listDestroyObject =new QList <QGraphicsItem *>;
@@ -61,6 +57,18 @@ scenePlayGame::scenePlayGame()
         j+=destoyObject->sizeDestroyObjectY+4;
 
     }
+    //Создание игровых "жизней"
+    playLivesList = new QList <QGraphicsItem *>;
+    int startLivePosX=15;
+    int startLivePosY=10;
+    for (int i=0;i<3;i++) { // Начальное количество жизней - 3
+        Live *live = new Live;
+        playLivesList->append(live);
+        live->setPos(startLivePosX,startLivePosY);
+        addItem(live);
+        startLivePosX+=17;
+    }
+
 
     //Таймер для запуска игры
     playTimer = new QTimer;
@@ -68,6 +76,15 @@ scenePlayGame::scenePlayGame()
     connect(playTimer,SIGNAL(timeout()),this,SLOT(moveBall()));
     //connect(deleteDestroyObjbtn,SIGNAL(clicked()),this,SLOT(deleteAllDectroyObject())); коннект для отладочной кнопки
 
+}
+
+void scenePlayGame::setPosBoardAndBall()
+{
+    playBoard->setX(512-playBoard->boardSizeX/2);
+    playBoard->setY(730);
+    playBall->setX(512-20/2);
+    playBall->setY(710);
+    playBall->flagGoUp=true;
 }
 
 //Обратока клавиатуры
@@ -119,7 +136,12 @@ void scenePlayGame::moveBall()
     }
     if(playBall->pos().y()>768+playBall->ballSize/2){
         playTimer->stop();
-        emit endGame(pointGamelbl->text().toInt());
+        removeItem(playLivesList->takeLast());
+        setPosBoardAndBall();
+        if(playLivesList->isEmpty()){
+            disconnect(playTimer,SIGNAL(timeout()),this,SLOT(moveBall()));
+            emit endGame(pointGamelbl->text().toInt());
+        }
     }
     //Обработка событий "коллизий" доски (встреча объектов с доской)
     if(!collidingItems(playBoard).isEmpty()){

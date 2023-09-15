@@ -42,8 +42,8 @@ MainWindowGame::MainWindowGame(QWidget *parent)
     scene->addWidget(exitGamebtn);
     //Надпись "Версия"
     version = new QLabel;
-    version->setGeometry(QRect(460,340,70,30));
-    version->setText("Версия:1.01");
+    version->setGeometry(QRect(450,340,80,30));
+    version->setText("Версия:1.02");
     version->setObjectName("ver");
     version->setStyleSheet(*styleCSS);
     scene->addWidget(version);

@@ -1,8 +1,6 @@
 #include "board.h"
-#include<QPen>
 #include<QPainter>
 #include<QDebug>
-
 
 
 Board::Board()
@@ -16,7 +14,7 @@ Board::Board()
 
 QRectF Board::boundingRect() const
 {
-    return QRectF(0,0,boardSizeX+1,boardSizeY+1);
+    return QRectF(0,0,boardSizeX,boardSizeY);
 }
 
 void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
