@@ -2,7 +2,7 @@
 #define LIVE_H
 #include <QGraphicsItem>
 
-class Live : public QGraphicsItem
+class Live : public QGraphicsItem // Игровые жизни
 {
 public:
     Live();

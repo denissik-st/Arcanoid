@@ -4,16 +4,27 @@
 #include<QList>
 #include<QTransform>
 #include<QPushButton>
+#include<qrandom.h>
 
 
 scenePlayGame::scenePlayGame()
 {
+
+    qsrand(time(NULL));
     //Панель состояния
     scenePlayGameWight = 996;
     scenePlayGameHeight = 730;
+    //Отрисовка левой границы
+    leftLine = new QLine;
+    leftLine->setLine(0,20,2,768);
+    addLine(*leftLine,QPen(Qt::white));
+    //Отрисовка правой границы
+    rightline = new QLine;
+    rightline->setLine(1000,20,1000,768);
+    addLine(*rightline,QPen(Qt::white));
+    //Отрисовка верхней границы
     addLine(0,20,1000,20,QPen(Qt::white));
-    addLine(0,20,2,768,QPen(Qt::white));
-    addLine(1000,20,1000,768,QPen(Qt::white));
+    //Виджет "счет игрока"
     QLabel *namePointGame = new QLabel;
     namePointGame->setText("Ваш счет:");
     namePointGame->setGeometry(900,0,50,15);
@@ -25,6 +36,9 @@ scenePlayGame::scenePlayGame()
     pointGamelbl->setAlignment(Qt::AlignRight);
     pointGamelbl->setText("0");
     addWidget(pointGamelbl);
+    //Создание босунов
+    expansionBoardBonus = NULL; // Приравнивание в NULL необходимо, т.к. пока бонус будет
+                                //обрабатываться в общем таймере (будет происходить проверка на существование)
     //Кнопка отладки
     /*QPushButton *deleteDestroyObjbtn = new QPushButton;
     deleteDestroyObjbtn->setText("Удалить");
@@ -94,12 +108,12 @@ void scenePlayGame::keyPressEvent(QKeyEvent *event)
         if(playBoard->pos().x()>8){
             playBoard->moveBy(-playBoard->speed,0);
         }
-        if(!playBall->start&&playBall->pos().x()>2+playBoard->boardSizeX/2-playBall->ballSize){
+        if(!playBall->start&&playBall->pos().x()>8+playBoard->boardSizeX/2-playBall->ballSize){
             playBall->moveBy(-playBoard->speed,0);
         }
     }
     if(event->key()==Qt::Key_Right){
-        if(playBoard->pos().x()<867){
+        if(playBoard->pos().x()<1000-playBoard->boardSizeX-8){
             playBoard->moveBy(playBoard->speed,0);
         }
         if(!playBall->start&&playBall->pos().x()<867+playBoard->boardSizeX/2-playBall->ballSize){
@@ -112,7 +126,7 @@ void scenePlayGame::keyPressEvent(QKeyEvent *event)
     }
 }
 
-//Движение мяча
+//Игровой таймер (движение мяча и бонусов)
 void scenePlayGame::moveBall()
 {
     if(playBall->flagGoUp){
@@ -126,9 +140,11 @@ void scenePlayGame::moveBall()
     }
     if(playBall->pos().x()>1000-playBall->ballSize){
         playBall->alpha=playBall->alpha+M_PI;
+        playBall->setX(1000-playBall->ballSize);
     }
     if(playBall->pos().x()<0){
         playBall->alpha=playBall->alpha-M_PI;
+        playBall->setX(0);
     }
 
     if(playBall->pos().y()<20+playBall->ballSize/2){
@@ -136,7 +152,13 @@ void scenePlayGame::moveBall()
     }
     if(playBall->pos().y()>768+playBall->ballSize/2){
         playTimer->stop();
+        playBall->start = false;
+        playBall->alpha = M_PI_2;
         removeItem(playLivesList->takeLast());
+        if(expansionBoardBonus){ // удаление бонуса в случаи проигрыша
+            removeItem(expansionBoardBonus);
+            expansionBoardBonus =NULL;
+        }
         setPosBoardAndBall();
         if(playLivesList->isEmpty()){
             disconnect(playTimer,SIGNAL(timeout()),this,SLOT(moveBall()));
@@ -151,6 +173,14 @@ void scenePlayGame::moveBall()
             if(item==playBall){
                playBall->flagGoUp=true;
                playBall->alpha=((playBoard->boardSizeX-(playBall->pos().x()-playBoard->pos().x()))-playBall->ballSize/2)*(M_PI/(float)playBoard->boardSizeX);
+            }
+            if(item==expansionBoardBonus){//удлинение доски
+                if(playBoard->boardSizeX<500){
+                    playBoard->boardSizeX+=30;
+                }
+                removeItem(expansionBoardBonus);
+                expansionBoardBonus =NULL;
+                playBoard->update();
             }
         }
     }
@@ -175,6 +205,16 @@ void scenePlayGame::moveBall()
                     *nowGamePoint = pointGamelbl->text().toInt();
                     *nowGamePoint+=*plusGamePoint;
                     pointGamelbl->setText(QString::number(*nowGamePoint));
+                    //Проверка на бонус
+                    if(qrand()%100>95){
+                        // Условие, что бонус увечивения длины доски не существует
+                        if(!expansionBoardBonus){
+                            expansionBoardBonus = new ExpansionBoardBonus;
+                            expansionBoardBonus->setY(itemDestoyObjectList->pos().y());
+                            expansionBoardBonus->setX(itemDestoyObjectList->pos().x()+itemDestoyObjectList->boundingRect().width()/2);
+                            addItem(expansionBoardBonus);
+                        }
+                    }
                     //Удаление разрушаемых объектов
                     removeItem(itemDestoyObjectList);
                     listDestroyObject->removeAt(count);
@@ -183,10 +223,19 @@ void scenePlayGame::moveBall()
             }
         }
     }
-    if(listDestroyObject->isEmpty()){
-        playTimer->stop();
-        emit endGame(pointGamelbl->text().toInt());
+    if(expansionBoardBonus){ // движение бонуса
+        expansionBoardBonus->moveBy(0,5);
+        if(expansionBoardBonus->pos().y()>768){
+            removeItem(expansionBoardBonus);
+            expansionBoardBonus =NULL;
+        }
     }
+    // Все разрушаемые объекты уничтожены
+    if(listDestroyObject->isEmpty()){
+           playTimer->stop();
+           disconnect(playTimer,SIGNAL(timeout()),this,SLOT(moveBall()));
+           emit endGame(pointGamelbl->text().toInt());
+       }
 }
 // Сигнал для отладки (Удаляется все разрущаемые объекты)
 /*void scenePlayGame::deleteAllDectroyObject()

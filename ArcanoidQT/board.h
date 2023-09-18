@@ -6,7 +6,7 @@
 #include<QList>
 
 
-class Board : public QGraphicsItem,QObject
+class Board : public QGraphicsItem,QObject //Игровая доска
 {
 
 public:

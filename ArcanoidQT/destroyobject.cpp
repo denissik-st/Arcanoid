@@ -35,5 +35,5 @@ void DestroyObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 int DestroyObject::RandonSizeX()
 {
 
-    return (qrand() % ((8 + 1) - 4) + 4)*15;
+    return (qrand() % ((8 + 1) - 4) + 4)*20;
 }

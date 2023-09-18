@@ -43,7 +43,7 @@ MainWindowGame::MainWindowGame(QWidget *parent)
     //Надпись "Версия"
     version = new QLabel;
     version->setGeometry(QRect(450,340,80,30));
-    version->setText("Версия:1.02");
+    version->setText("Версия:1.03");
     version->setObjectName("ver");
     version->setStyleSheet(*styleCSS);
     scene->addWidget(version);

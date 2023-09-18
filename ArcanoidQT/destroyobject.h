@@ -3,7 +3,7 @@
 #include<QGraphicsItem>
 
 
-class DestroyObject : public QGraphicsItem
+class DestroyObject : public QGraphicsItem // Разрушаемые объекты
 {
 public:
     int sizeDestroyObjectX;

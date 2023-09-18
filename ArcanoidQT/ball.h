@@ -4,7 +4,7 @@
 #include<QTransform>
 #include <QtMath>
 
-class Ball : public QGraphicsItem
+class Ball : public QGraphicsItem //Мяч
 {
 public:
     float alpha;

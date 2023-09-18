@@ -12,7 +12,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindowGame; }
 QT_END_NAMESPACE
 
-class MainWindowGame : public QMainWindow
+class MainWindowGame : public QMainWindow //Окно программы
 {
     Q_OBJECT
 
